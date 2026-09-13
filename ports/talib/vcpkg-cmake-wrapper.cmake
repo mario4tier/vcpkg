@@ -68,8 +68,9 @@ if(talib_FOUND AND NOT TARGET talib::talib)
 
   target_link_libraries(talib::talib INTERFACE
     $<$<CONFIG:Debug>:${talib_LIBRARIES_DEBUG}>
-    $<$<CONFIG:RelWithDebInfo>:${talib_LIBRARIES_RELEASE}>
-    $<$<CONFIG:Release>:${talib_LIBRARIES_RELEASE}>
-    $<$<CONFIG:MinSizeRel>:${talib_LIBRARIES_RELEASE}>
+    $<$<NOT:$<CONFIG:Debug>>:${talib_LIBRARIES_RELEASE}>
   )
+  if(UNIX AND NOT APPLE)
+    target_link_libraries(talib::talib INTERFACE m)
+  endif()
 endif()
